@@ -28,6 +28,7 @@
 		7F61E85123D79E43004C2115 /* NewPostViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F61E85023D79E43004C2115 /* NewPostViewController.swift */; };
 		7F8B868723FF4D7D000423CC /* HabitModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F8B868623FF4D7D000423CC /* HabitModels.swift */; };
 		7F8B868923FF4ED1000423CC /* HabitKeys.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F8B868823FF4ED1000423CC /* HabitKeys.swift */; };
+		7F936FA8242423E700BE4084 /* loginbg.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = 7F936FA7242423E700BE4084 /* loginbg.mp4 */; };
 		7F98E12E2406C9FE00C06561 /* Post.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F98E12D2406C9FD00C06561 /* Post.swift */; };
 		7FA48B7D23D3E4AA00444484 /* Protocols.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FA48B7C23D3E4AA00444484 /* Protocols.swift */; };
 		7FA48B8023D41E6B00444484 /* MenuOptionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FA48B7F23D41E6B00444484 /* MenuOptionCell.swift */; };
@@ -43,7 +44,6 @@
 		7FDC09B623FB0AA400790370 /* SparkService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FDC09B023FB0AA400790370 /* SparkService.swift */; };
 		7FDC09B723FB0AA400790370 /* SparkSetup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FDC09B123FB0AA400790370 /* SparkSetup.swift */; };
 		7FDC09B923FB3A8C00790370 /* StatViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FDC09B823FB3A8C00790370 /* StatViewController.swift */; };
-		7FE1CA4F23DF52BD0048EDB8 /* loginbg.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = 7FE1CA4E23DF52BD0048EDB8 /* loginbg.mp4 */; };
 		7FE27EB823D74C52006E6CBD /* PostTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FE27EB623D74C52006E6CBD /* PostTableViewCell.swift */; };
 		7FE27EB923D74C52006E6CBD /* PostTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7FE27EB723D74C52006E6CBD /* PostTableViewCell.xib */; };
 		7FE27EBB23D7566C006E6CBD /* FeedViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FE27EBA23D7566C006E6CBD /* FeedViewController.swift */; };
@@ -75,6 +75,7 @@
 		7F61E85023D79E43004C2115 /* NewPostViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewPostViewController.swift; sourceTree = "<group>"; };
 		7F8B868623FF4D7D000423CC /* HabitModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HabitModels.swift; sourceTree = "<group>"; };
 		7F8B868823FF4ED1000423CC /* HabitKeys.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HabitKeys.swift; sourceTree = "<group>"; };
+		7F936FA7242423E700BE4084 /* loginbg.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = loginbg.mp4; sourceTree = "<group>"; };
 		7F98E12D2406C9FD00C06561 /* Post.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Post.swift; path = cool/Habit/Post.swift; sourceTree = SOURCE_ROOT; };
 		7FA48B7C23D3E4AA00444484 /* Protocols.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Protocols.swift; sourceTree = "<group>"; };
 		7FA48B7F23D41E6B00444484 /* MenuOptionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuOptionCell.swift; sourceTree = "<group>"; };
@@ -90,7 +91,6 @@
 		7FDC09B023FB0AA400790370 /* SparkService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SparkService.swift; sourceTree = "<group>"; };
 		7FDC09B123FB0AA400790370 /* SparkSetup.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SparkSetup.swift; sourceTree = "<group>"; };
 		7FDC09B823FB3A8C00790370 /* StatViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatViewController.swift; sourceTree = "<group>"; };
-		7FE1CA4E23DF52BD0048EDB8 /* loginbg.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; name = loginbg.mp4; path = ../../../../Downloads/loginbg.mp4; sourceTree = "<group>"; };
 		7FE27EB623D74C52006E6CBD /* PostTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostTableViewCell.swift; sourceTree = "<group>"; };
 		7FE27EB723D74C52006E6CBD /* PostTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = PostTableViewCell.xib; sourceTree = "<group>"; };
 		7FE27EBA23D7566C006E6CBD /* FeedViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedViewController.swift; sourceTree = "<group>"; };
@@ -205,7 +205,7 @@
 		7FD1ED3C23D2447800E473AA /* Media */ = {
 			isa = PBXGroup;
 			children = (
-				7FE1CA4E23DF52BD0048EDB8 /* loginbg.mp4 */,
+				7F936FA7242423E700BE4084 /* loginbg.mp4 */,
 				7FD1ED3D23D246D300E473AA /* boy.jpg */,
 			);
 			path = Media;
@@ -305,8 +305,8 @@
 				7FC513AB23D20A77005D4ECC /* GoogleService-Info.plist in Resources */,
 				7FD1ED3E23D246D300E473AA /* boy.jpg in Resources */,
 				7F019F1223D0ADFD00851F55 /* Assets.xcassets in Resources */,
+				7F936FA8242423E700BE4084 /* loginbg.mp4 in Resources */,
 				7FE27EB923D74C52006E6CBD /* PostTableViewCell.xib in Resources */,
-				7FE1CA4F23DF52BD0048EDB8 /* loginbg.mp4 in Resources */,
 				7F019F1023D0ADFC00851F55 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

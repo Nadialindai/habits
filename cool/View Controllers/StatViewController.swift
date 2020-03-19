@@ -20,7 +20,6 @@ class StatViewController: UIViewController {
     let profileImageViewHeight: CGFloat = 78
     lazy var profileImageView: UIImageView = {
         var iv = UIImageView()
-      let currentUser = Spark.fetchCurrentSparkUser(completion: <#T##(String, Error?, SparkUser?) -> ()#>)
         iv.backgroundColor = Service.baseColor
         iv.contentMode = .scaleAspectFill
         iv.layer.cornerRadius = profileImageViewHeight / 2
