@@ -7,3 +7,18 @@
 //
 
 import Foundation
+
+public struct UserProfile: Codable {
+    let username: String
+    let photoURL: String?
+    let usercount: Int?
+    let uid: String?
+    
+    enum CodingKeys: String, CodingKey  {
+        case username
+        case photoURL
+        case usercount
+        case uid
+        
+    }
+}

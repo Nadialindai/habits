@@ -7,3 +7,12 @@
 //
 
 import Foundation
+
+struct FirebaseKeys {
+    struct CollectionPath {
+        static let privateData = "privateData"
+        static let publicData = "publicData"
+        
+        static let users = "users"
+    }
+}

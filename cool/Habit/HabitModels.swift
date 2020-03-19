@@ -7,3 +7,20 @@
 //
 
 import Foundation
+import UIKit
+
+//habit object for posting
+struct Habit {
+    let title: String
+    let photo: UIImage
+
+
+    
+    var dictionary: [String: Any] {
+        return [
+            HabitKeys.Habit.photo: photo,
+            HabitKeys.Habit.title: title,
+           
+        ]
+    }
+}

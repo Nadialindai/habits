@@ -20,9 +20,7 @@ class Spark {
     static func start() {
         FirebaseApp.configure()
     }
-    // MARK: -
-    // MARK: Start Firebase
-    
+
     // MARK: -
     // MARK: Firestore Database
     static var firestoreSetup: Firestore = {
@@ -33,31 +31,31 @@ class Spark {
     }()
     
     // MARK: -
-    // MARK: Logout
+    // MARK: Firestore Logout
     static func logout(completion: @escaping (_ result: Bool, _ error: Error?) ->()) {
+       let firebaseAuth = Auth.auth()
         do {
-            try Auth.auth().signOut()
-            print("Successfully signed out")
+          try firebaseAuth.signOut()
             completion(true, nil)
-        } catch let err {
-            print("Failed to sign out with error:", err)
-            completion(false, err)
+        } catch let signOutError as NSError {
+            completion(false, signOutError)
         }
     }
     
     // MARK: -
     // MARK: Sign in with Facebook
     static func signInWithFacebook(in viewController: UIViewController, completion: @escaping (_ message: String, _ error: Error?, _ sparkUser: SparkUser?) ->()) {
+        
         let loginManager = LoginManager() //????
         loginManager.logIn(permissions: [.publicProfile, .email], viewController: viewController) { (result) in
             switch result {
-            case .success(granted: _, declined: _, token: _):
+            case .success:
                 print("Succesfully logged in into Facebook.")
                 self.signIntoFirebaseWithFacebook(completion: completion)
             case .failed(let err):
                 completion("Failed to get Facebook user with error:", err, nil)
             case .cancelled:
-                completion("Canceled getting Facebook user.", nil, nil)
+                completion("Login attempt was cancelled.", nil, nil)
             }
         }
     }
@@ -72,6 +70,7 @@ class Spark {
         let facebookCredential = FacebookAuthProvider.credential(withAccessToken: tokenString)
         signIntoFirebase(withFacebookCredential: facebookCredential, completion: completion)
     }
+    
     
     fileprivate static func signIntoFirebase(withFacebookCredential facebookCredential: AuthCredential, completion: @escaping (_ message: String, _ error: Error?, _ sparkUser: SparkUser?) ->()) {
         Auth.auth().signIn(with: facebookCredential) { (result, err) in
@@ -94,7 +93,6 @@ class Spark {
                 return
             }
             
-            print(responseDict)
             guard let firstName = responseDict["first_name"] as? String,
                 let lastName = responseDict["last_name"] as? String,
                 let email = responseDict["email"] as? String,
@@ -117,12 +115,12 @@ class Spark {
 
     fileprivate static func saveUserIntoFirestore(profileImageData: String, sparkUser: SparkUser?, completion: @escaping (_ message: String, _ error: Error?, _ sparkUser: SparkUser?) ->()) {
     
-    guard let sparkUser = sparkUser else {
-        completion("Failed to fetch sparkUser", nil, nil);
-        return
-    }
+        guard let sparkUser = sparkUser else {
+            completion("Failed to fetch sparkUser", nil, nil);
+            return
+        }
     
-    fetchSparkUser(sparkUser.uid) { (message, err, fetchedSparkUser) in
+        fetchSparkUser(sparkUser.uid) { (message, err, fetchedSparkUser) in
         if let err = err {
             completion("Failed to fetch user data", err, nil)
             return
@@ -152,34 +150,51 @@ class Spark {
 }
 
     fileprivate static func saveSparkUser(profileImageData: String, sparkUser: SparkUser, completion: @escaping (_ message: String, _ error: Error?, _ sparkUser: SparkUser?) ->()) {
-    
-        guard let profileImage = UIImage(contentsOfFile: profileImageData) else { completion("Failed to generate profile image from data", nil, nil); return }
-    guard let profileImageUploadData = profileImage.jpegData(compressionQuality: 0.3) else { completion("Failed to compress jpeg data", nil, nil); return }
-    
-    let fileName = UUID().uuidString
-    Storage_Profile_Images.child(fileName).putData(profileImageUploadData, metadata: nil) { (metadata, err) in
-        if let err = err { completion("Failed to save profile image to Storage with error:", err, nil); return }
-        guard let metadata = metadata, let path = metadata.path else { completion("Failed to get metadata or path to profile image url.", nil, nil); return }
-        Spark.getDownloadUrl(from: path, completion: { (profileImageFirebaseUrl, err) in
-            if let err = err { completion("Failed to get download url with error:", err, nil); return }
-            guard let profileImageFirebaseUrl = profileImageFirebaseUrl else { completion("Failed to get profileImageUrl.", nil, nil); return }
-            print("Successfully uploaded profile image into Firebase storage with URL:", profileImageFirebaseUrl)
+        guard let imageURL = URL(string: profileImageData) else { return }
+        guard let imageData = try? Data(contentsOf: imageURL) else { return }
+        let image = UIImage(data: imageData)
+        guard let profileImageUploadData = image?.jpegData(compressionQuality: 0.3) else { completion("Failed to compress jpeg data", nil, nil); return }
+       
+        let fileName = UUID().uuidString
+        let storageRef = Storage_Profile_Images.child("user/\(fileName)")
+        let metadata = StorageMetadata()
+        metadata.contentType = "image/jpg"
+        
+        storageRef.putData(profileImageUploadData, metadata: metadata) { (metadata, error) in
+            if let error = error {
+                    completion("Failed to save profile image to Storage with error:", error, nil);
+                return
+            }
+            // Metadata contains file metadata such as size, content-type.
             
-            let documentPath = sparkUser.uid
-            let documentData = [SparkKeys.SparkUser.uid: sparkUser.uid,
-                                SparkKeys.SparkUser.name: sparkUser.name,
-                                SparkKeys.SparkUser.email: sparkUser.email,
-                                SparkKeys.SparkUser.profileImageUrl: profileImageFirebaseUrl] as [String : Any]
-            
-            Spark.Firestore_Users_Collection.document(documentPath).setData(documentData, merge: true, completion: { (err) in
-                if let err = err { completion("Failed to save document with error:", err, nil); return }
-                let newSparkUser = SparkUser(documentData: documentData)
-                print("Successfully saved user info into Firestore: \(String(describing: newSparkUser))")
-                completion("Successfully signed in with Facebook.", nil, newSparkUser)
+            storageRef.downloadURL(completion: { (profileImageFirebaseUrl, error) in
+                if let error = error {
+                    completion("Failed to get download url with error:", error, nil);
+                    return
+                }
+               
+                
+                guard let profileImageFirebaseUrl = profileImageFirebaseUrl else {
+                    completion("Failed to get profileImageUrl.", nil, nil);
+                    return
+                }
+                print("Successfully uploaded profile image into Firebase storage with URL:", profileImageFirebaseUrl.absoluteString)
+                
+                let documentPath = sparkUser.uid
+                let documentData = [SparkKeys.SparkUser.uid: sparkUser.uid,
+                                    SparkKeys.SparkUser.name: sparkUser.name,
+                                    SparkKeys.SparkUser.email: sparkUser.email,
+                                    SparkKeys.SparkUser.profileImageUrl: profileImageFirebaseUrl.absoluteString] as [String : Any]
+                
+                Spark.Firestore_Users_Collection.document(documentPath).setData(documentData, completion: { (err) in
+                    if let err = err { completion("Failed to save document with error:", err, nil); return }
+                    let newSparkUser = SparkUser(documentData: documentData)
+                    print("Successfully saved user info into Firestore: \(String(describing: newSparkUser))")
+                    completion("Successfully signed in with Facebook.", nil, newSparkUser)
+                })
             })
-            
-        })
     }
+        
 }
 
 // MARK: -
@@ -208,11 +223,19 @@ static func fetchCurrentSparkUser(completion: @escaping (_ message: String, _ er
 // MARK: -
 // MARK: Fetch Spark User with uid
 static func fetchSparkUser(_ uid: String, completion: @escaping (_ message: String, _ error: Error?, _ sparkUser: SparkUser?) ->()) {
-    
-    if let providerData = Auth.auth().currentUser?.providerData {
-        for item in providerData {
-            print("\(item.providerID)")
-        }
+    Firestore_Users_Collection.whereField(SparkKeys.SparkUser.uid, isEqualTo: uid)
+        .getDocuments { snapshot, err in
+            if let err = err {
+                completion("Failed to fetch docuemnt with error:", err, nil);
+                return
+            }
+            for document in snapshot!.documents {
+                print("\(document.documentID) => \(document.data())")
+            }
+        let sparkUser = snapshot!.documents.compactMap({
+            SparkUser(documentData: $0.data())}).first
+        completion("Successfully fetched spark user", nil, sparkUser)
+
     }
 }
 
@@ -244,11 +267,4 @@ static func deleteAsset(fromUrl url: String, completion: @escaping (_ result: Bo
     
 }
 
-// MARK: -
-// MARK: Get download URL
-static func getDownloadUrl(from path: String, completion: @escaping (String?, Error?) -> Void) {
-    Storage.storage().reference().child(path).downloadURL { (url, err) in
-        completion(url?.absoluteString, err)
-    }
-}
 }

@@ -6,6 +6,10 @@
 //  Copyright © 2020 Apple Inc. All rights reserved.
 //
 
-protocol HomeControllerDelegate {
-    func handleMenuToggle()
+protocol ContainerControllerDelegate {
+    //toggling handled by container and not by home controller
+    //present the homeview controller over the container controller
+    func handleMenuToggle(forMenuOption menuOption: MenuOption?)
 }
+
+

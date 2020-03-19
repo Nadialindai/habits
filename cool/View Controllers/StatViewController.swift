@@ -9,7 +9,7 @@ import UIKit
 import TinyConstraints
 import JGProgressHUD
 
-class UserProfileViewController: UIViewController {
+class StatViewController: UIViewController {
     
     let hud: JGProgressHUD = {
         let hud = JGProgressHUD(style: .light)
@@ -20,6 +20,7 @@ class UserProfileViewController: UIViewController {
     let profileImageViewHeight: CGFloat = 78
     lazy var profileImageView: UIImageView = {
         var iv = UIImageView()
+      let currentUser = Spark.fetchCurrentSparkUser(completion: <#T##(String, Error?, SparkUser?) -> ()#>)
         iv.backgroundColor = Service.baseColor
         iv.contentMode = .scaleAspectFill
         iv.layer.cornerRadius = profileImageViewHeight / 2
@@ -63,6 +64,7 @@ class UserProfileViewController: UIViewController {
         setupViews()
        // fetchCurrentUser()
     }
+
     
     @objc func handleFetchUserButtonTapped() {
         //fetchCurrentUser()

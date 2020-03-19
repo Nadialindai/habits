@@ -13,6 +13,7 @@ struct SparkKeys {
     struct SparkUser {
         static let uid = "uid"
         static let name = "name"
+        static let username = "username"
         static let email = "email"
         static let profileImageUrl = "profileImageUrl"
     }

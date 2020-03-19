@@ -8,8 +8,9 @@
 
 import Firebase
 
-extension FB {
+extension Spark {
     static let Firestore_Users_Collection = Firestore.firestore().collection("users")
     static let uid = Auth.auth().currentUser?.uid
-    static let Storage_Profile_Images = Storage.storage().reference().child("user/\(String(describing: uid))")
+    static let Storage_Profile_Images = Storage.storage().reference()
+    static let Firestore_Habits_Collection = Firestore.firestore().collection("habits")
 }
